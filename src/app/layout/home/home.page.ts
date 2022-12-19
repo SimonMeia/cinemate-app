@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from "src/app/auth/auth.service";
 import { HttpClient } from "@angular/common/http";
 import { ViewWillEnter } from "@ionic/angular";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +22,7 @@ export class HomePage implements OnInit, ViewWillEnter {
 
   ionViewWillEnter(): void {
     // Make an HTTP request to retrieve the trips.
-    const url = "http://localhost:3000/reviews/mygroups";
+    const url = `${environment.apiUrl}/reviews/mygroups`;
     this.http.get(url).subscribe((reviews) => {
       console.log(`Review loaded`, reviews);
     });

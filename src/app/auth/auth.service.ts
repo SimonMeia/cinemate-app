@@ -8,8 +8,7 @@ import { User } from "../models/user";
 import { AuthRequest } from "../models/auth-request";
 import { Storage } from "@ionic/storage";
 
-// const API_URL = "https://cinemate.onrender.com";
-const API_URL = "http://localhost:3000";
+import { environment } from "src/environments/environment";
 
 /**
  * Authentication service for login/logout.
@@ -43,7 +42,7 @@ export class AuthService {
 
   logIn$(authRequest: AuthRequest): Observable<User> {
     console.log(authRequest)
-    const authUrl = `${API_URL}/auth/login`;
+    const authUrl = `${environment.apiUrl}/auth/login`;
     return this.http.post<AuthResponse>(authUrl, authRequest).pipe(
       delayWhen((auth) => this.saveAuth$(auth)),
       map((auth) => {
