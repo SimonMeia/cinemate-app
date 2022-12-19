@@ -4,6 +4,7 @@ import { AuthService } from "src/app/auth/auth.service";
 import { HttpClient } from "@angular/common/http";
 import { ViewWillEnter } from "@ionic/angular";
 import { environment } from 'src/environments/environment';
+import { ReviewService } from 'src/app/api/review.service';
 
 @Component({
   selector: 'app-home',
@@ -17,14 +18,16 @@ export class HomePage implements OnInit, ViewWillEnter {
     // Inject the router
     private router: Router,
     // Inject the HTTP client
-    public http: HttpClient
+    public http: HttpClient,
+    // Inject Api Service for request
+    public reviewService: ReviewService
   ) { }
 
   ionViewWillEnter(): void {
-    // Make an HTTP request to retrieve the trips.
-    const url = `${environment.apiUrl}/reviews/mygroups`;
-    this.http.get(url).subscribe((reviews) => {
-      console.log(`Review loaded`, reviews);
+    this.reviewService.getMyGroups().subscribe(reviews => {
+      console.log(reviews)
+    }, err => {
+      console.warn('Could not get reviews', err);
     });
   }
 
