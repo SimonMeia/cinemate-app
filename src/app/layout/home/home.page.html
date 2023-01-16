@@ -10,4 +10,7 @@
 </ion-header>
 
 <ion-content>
+    <div *ngFor="let review of reviews">
+        <app-review [review]="review"></app-review>
+    </div>
 </ion-content>
