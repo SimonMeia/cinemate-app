@@ -27,6 +27,14 @@ const routes: Routes = [
       },
     ]
   },
+  {
+    path: 'create-review',
+    loadChildren: () => import('./create-review/create-review.module').then( m => m.CreateReviewPageModule)
+  },
+  {
+    path: 'review',
+    loadChildren: () => import('./review/review.module').then( m => m.ReviewPageModule)
+  },
 
 ];
 

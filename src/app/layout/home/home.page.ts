@@ -46,4 +46,8 @@ export class HomePage implements OnInit, ViewWillEnter {
     this.auth.logOut();
     this.router.navigateByUrl('/login');
   }
+
+  addReview(){
+    this.router.navigateByUrl('/create-review')
+  }
 }

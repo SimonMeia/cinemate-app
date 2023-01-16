@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Ajouter une review</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- https://ionicframework.com/docs/api/item#item-inputs -->
+
+<ion-content class="ion-padding">
+  <form #createReviewForm="ngForm" (submit)="createReview(createReviewForm)">
+    <ion-input
+      type="text"
+      placeholder="Nom du film"
+      [(ngModel)]="movie"
+      name="movie"
+      (input)="lookForMovie()"
+      required
+    ></ion-input>
+
+    <ion-input
+      type="date"
+      placeholder="Date"
+      [(ngModel)]="date"
+      name="date"
+      required
+    ></ion-input>
+
+    <label for="rating-1">1</label>
+    <input
+      type="radio"
+      id="rating-1"
+      name="rating"
+      value="1"
+      [(ngModel)]="rating"
+    />
+    <label for="rating-2">2</label>
+    <input
+      type="radio"
+      id="rating-2"
+      name="rating"
+      value="2"
+      [(ngModel)]="rating"
+    />
+    <label for="rating-3">3</label>
+    <input
+      type="radio"
+      id="rating-3"
+      name="rating"
+      value="3"
+      [(ngModel)]="rating"
+    />
+    <label for="rating-4">4</label>
+    <input
+      type="radio"
+      id="rating-4"
+      name="rating"
+      value="4"
+      [(ngModel)]="rating"
+    />
+    <label for="rating-5">5</label>
+    <input
+      type="radio"
+      id="rating-5"
+      name="rating"
+      value="5"
+      [(ngModel)]="rating"
+    />
+
+    <ion-input
+      type="textebox"
+      placeholder="Commentaire"
+      [(ngModel)]="comment"
+      name="comment"
+      required
+    >
+    </ion-input>
+
+    <ion-button type="submit">Submit</ion-button>
+    <!-- <ion-button type="submit" [disabled]="disablePublishButton && createReviewForm.invalid">Submit</ion-button> -->
+  </form>
+</ion-content>
