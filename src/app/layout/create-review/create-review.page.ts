@@ -57,33 +57,33 @@ export class CreateReviewPage implements OnInit {
 
   createReview(form: NgForm) {
     if (form.valid) {
-        console.log('Form is valid');
-        let reviewData = {
-            rating: this.rating,
-            comment: this.comment,
-            date: this.date,
-            location: {
-                type: 'Point',
-                coordinate: [6.647778558579233, 46.78060279685718],
-            },
-            medias: [],
-            tmdbID: this.tmdbID,
-        };
-        console.log('add movie', reviewData);
-      
-    //   this.reviewService.addReviewToDatabase(reviewData).subscribe(
-    //     (result) => {
-    //       console.log('new review : ', result);
-    //       result.date = new Date(result.date)
-    //         .toLocaleDateString('fr')
-    //         .toString();
-    //       this.storeService.setCurrentReview(result);
-    //       this.router.navigateByUrl('/review');
-    //     },
-    //     (err) => {
-    //       console.warn('Could not get reviews', err);
-    //     }
-    //   );
+      console.log('Form is valid');
+      let reviewData = {
+        rating: this.rating,
+        comment: this.comment,
+        date: this.date,
+        location: {
+          type: 'Point',
+          coordinate: [6.647778558579233, 46.78060279685718],
+        },
+        medias: [],
+        tmdbID: this.tmdbID,
+      };
+      console.log('add movie', reviewData);
+
+      this.reviewService.addReviewToDatabase(reviewData).subscribe(
+        (result) => {
+          console.log('new review : ', result);
+          result.date = new Date(result.date)
+            .toLocaleDateString('fr')
+            .toString();
+          this.storeService.setCurrentReview(result);
+          this.router.navigateByUrl('/review');
+        },
+        (err) => {
+          console.warn('Could not get reviews', err);
+        }
+      );
     }
   }
 }

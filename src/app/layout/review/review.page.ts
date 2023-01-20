@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Review } from 'src/app/models/review';
 import { StoreService } from 'src/app/store/store.service';
 
@@ -11,7 +12,7 @@ export class ReviewPage implements OnInit {
   public review: Review;
   public rating: Array<string>;
 
-  constructor(public storeService: StoreService) {}
+  constructor(public storeService: StoreService, private router: Router) {}
 
   ngOnInit() {
     this.review = this.storeService.getCurrentReview();
@@ -40,13 +41,16 @@ export class ReviewPage implements OnInit {
     //     role:'admin'
     //   }
     // };
-    this.rating = []
+    this.rating = [];
     for (let index = 1; index <= 5; index++) {
-        if(index <= this.review.rating){
-            this.rating.push('star')
-        }else{
-            this.rating.push('star-outline')
-        }
+      if (index <= this.review.rating) {
+        this.rating.push('star');
+      } else {
+        this.rating.push('star-outline');
+      }
     }
+  }
+  home() {
+    this.router.navigateByUrl('/home');
   }
 }

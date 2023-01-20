@@ -3,8 +3,10 @@
 </ion-toolbar> -->
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="home"></ion-back-button>
-    </ion-buttons>
+        <ion-button (click)="home()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     <ion-title>Review</ion-title>
   </ion-toolbar>
 </ion-header>
