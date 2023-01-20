@@ -6,6 +6,7 @@ import { ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { ReviewService } from 'src/app/api/review.service';
 import { Review } from 'src/app/models/review';
+import { StoreService } from 'src/app/store/store.service';
 
 @Component({
   selector: 'app-home',
@@ -23,13 +24,26 @@ export class HomePage implements OnInit, ViewWillEnter {
     // Inject the HTTP client
     public http: HttpClient,
     // Inject Api Service for request
-    public reviewService: ReviewService
+    public reviewService: ReviewService,
+    public storeService: StoreService
   ) {}
 
   ionViewWillEnter(): void {
     this.reviewService.getReviewsFromMyGroups().subscribe(
       (result) => {
-        console.log("reviews : ", result);
+        console.log("result : ", result);
+        console.log("result.data", result.data)
+        result.data.sort((a, b) => {
+            let date1 = new Date(a.date)
+            let date2 = new Date (b.date)
+            if(date1.getTime() < date2.getTime()){
+                return -1
+            }else if (date1.getTime() > date2.getTime()){
+                return 1
+            }
+            return 0
+        })
+        result.data.forEach((review) => review.date = new Date(review.date).toLocaleDateString('fr').toString())
         this.reviews = result.data
       },
       (err) => {
@@ -49,5 +63,10 @@ export class HomePage implements OnInit, ViewWillEnter {
 
   addReview(){
     this.router.navigateByUrl('/create-review')
+  }
+
+  displayReview(review){
+    this.storeService.setCurrentReview(review)
+    this.router.navigateByUrl('/review')
   }
 }

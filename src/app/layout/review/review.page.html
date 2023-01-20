@@ -11,8 +11,8 @@
 
 <ion-content class="ion-padding">
   <h1>{{review.movie.title}}</h1>
-  <h2>Auteur :</h2>
-  <p>{{review.user.firstName}} {{review.user.lastName}}</p>
+  <!-- <h2>Auteur :</h2> -->
+  <p>{{review.user.firstName}} {{review.user.lastName}}, {{review.date}}</p>
   <h2>Note :</h2>
   <div>
     <span *ngFor="let star of rating">
