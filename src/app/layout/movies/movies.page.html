@@ -4,8 +4,21 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div *ngFor="let movie of movies">
-    <app-movie [movie]="movie" (click)="displayMovie(movie)"></app-movie>
+<ion-content class="ion-padding">
+  <h1>Dernières sorties</h1>
+  <div class="movieList">
+    <app-movie
+      *ngFor="let movie of movies"
+      [movie]="movie"
+      (click)="displayMovie(movie)"
+    ></app-movie>
+  </div>
+  <h1>Les meilleurs films</h1>
+  <div class="movieList">
+    <app-movie
+      *ngFor="let movie of movies"
+      [movie]="movie"
+      (click)="displayMovie(movie)"
+    ></app-movie>
   </div>
 </ion-content>
