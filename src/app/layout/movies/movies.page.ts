@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ViewWillEnter } from '@ionic/angular';
 import { MovieService } from 'src/app/api/movie.service';
 import { Movie } from 'src/app/models/movie';
+import { StoreService } from 'src/app/store/store.service';
 
 @Component({
   selector: 'app-movies',
@@ -16,7 +18,9 @@ export class MoviesPage implements ViewWillEnter {
     // Inject the HTTP client
     public http: HttpClient,
     // Inject Api Service for request
-    public movieService: MovieService
+    public movieService: MovieService,
+    public storeService: StoreService,
+    public router: Router
   ) {}
 
   ionViewWillEnter(): void {
@@ -32,6 +36,7 @@ export class MoviesPage implements ViewWillEnter {
   }
 
   displayMovie(movie) {
-    console.log(movie);
+    this.storeService.setCurrentMovie(movie)
+    this.router.navigateByUrl('movie')
   }
 }

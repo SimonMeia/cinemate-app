@@ -35,6 +35,10 @@ const routes: Routes = [
     path: 'review',
     loadChildren: () => import('./review/review.module').then( m => m.ReviewPageModule)
   },
+  {
+    path: 'movie',
+    loadChildren: () => import('./movie/movie.module').then( m => m.MoviePageModule)
+  },
 
 ];
 

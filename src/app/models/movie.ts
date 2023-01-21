@@ -9,5 +9,5 @@ export type Movie = {
     releaseDate: string,
     tmdbID: number,
     moviePeople: MoviePeople[]
-    Genre: Genre[]
+    genres: Genre[]
 };

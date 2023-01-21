@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Movie } from '../models/movie';
 import { Review } from '../models/review';
 
 @Injectable({
@@ -6,6 +7,7 @@ import { Review } from '../models/review';
 })
 export class StoreService {
   private currentReview: Review;
+  private currentMovie: Movie;
   constructor() {
     
   }
@@ -13,8 +15,14 @@ export class StoreService {
   getCurrentReview() {
     return this.currentReview;
   }
-
   setCurrentReview(review: Review) {
     this.currentReview = review;
+  }
+
+  getCurrentMovie() {
+    return this.currentMovie;
+  }
+  setCurrentMovie(movie: Movie) {
+    this.currentMovie = movie;
   }
 }
