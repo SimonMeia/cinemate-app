@@ -8,6 +8,6 @@ export type Movie = {
     backdropURL: string,
     releaseDate: string,
     tmdbID: number,
-    moviePeople: [MoviePeople]
-    Genre: [Genre]
+    moviePeople: MoviePeople[]
+    Genre: Genre[]
 };
