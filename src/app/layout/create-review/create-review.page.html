@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-        <ion-back-button defaultHref="home"></ion-back-button>
+      <ion-back-button defaultHref="home"></ion-back-button>
     </ion-buttons>
     <ion-title>Ajouter une review</ion-title>
   </ion-toolbar>
@@ -90,7 +90,29 @@
     >
     </ion-input>
 
+    <h1>Photo</h1>
+    <ion-button (click)="addPictureToReview()">Ajouter une photo</ion-button>
+    <img *ngIf="picture" [src]="picture.url" />
+    <h1>Localisation</h1>
+
+    <ion-button (click)="printCurrentPosition()" class="localisation-btn">
+      Current position
+    </ion-button>
+    <div
+      class="leaflet-map"
+      leaflet
+      [leafletOptions]="mapOptions"
+      [leafletLayers]="mapMarkers"
+      (leafletMapReady)="onMapReady($event)"
+    ></div>
+
     <!-- <ion-button type="submit">Submit</ion-button> -->
-    <ion-button type="submit" [disabled]="disablePublishButton && createReviewForm.invalid">Submit</ion-button>
+    <ion-button
+      expand="block"
+      type="submit"
+      [disabled]="disablePublishButton && createReviewForm.invalid"
+    >
+      Submit
+    </ion-button>
   </form>
 </ion-content>

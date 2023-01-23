@@ -24,4 +24,12 @@
   </div>
   <h2>Commentaire :</h2>
   <p>{{review.comment}}</p>
+  <img *ngIf="review.medias" [src]="review.medias" />
+  <div
+    class="leaflet-map"
+    leaflet
+    [leafletOptions]="mapOptions"
+    [leafletLayers]="mapMarkers"
+    (leafletMapReady)="onMapReady($event)"
+  ></div>
 </ion-content>

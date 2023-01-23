@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { CreateReviewPageRoutingModule } from './create-review-routing.module';
 
 import { CreateReviewPage } from './create-review.page';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CreateReviewPageRoutingModule
+    CreateReviewPageRoutingModule,
+    LeafletModule
   ],
   declarations: [CreateReviewPage]
 })

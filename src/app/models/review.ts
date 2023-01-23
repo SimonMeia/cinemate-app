@@ -1,5 +1,6 @@
 import { Movie } from "./movie"
 import { User } from "./user"
+import { Location } from "./location";
 
 export type Review = {
     id: string,
@@ -8,14 +9,6 @@ export type Review = {
     date: string,
     user: User,
     movie: Movie,
-
-    // "location": {
-    //     "type": "Point",
-    //     "coordinate": [
-    //         6.647778558579233,
-    //         46.78060279685718
-    //     ]
-    // },
-    // "medias": [],
-
+    medias: string,
+    location: Location
 };

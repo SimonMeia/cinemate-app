@@ -36,7 +36,7 @@ export class MoviesPage implements ViewWillEnter {
   }
 
   displayMovie(movie) {
-    this.storeService.setCurrentMovie(movie)
+    this.storeService.currentMovie = movie
     this.router.navigateByUrl('movie')
   }
 }

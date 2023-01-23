@@ -2,8 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReviewService } from 'src/app/api/review.service';
+import { QimgImage } from 'src/app/models/qimage';
+import { PictureService } from 'src/app/picture/picture.service';
 import { StoreService } from 'src/app/store/store.service';
 import { TmdbService } from 'src/app/tmdb/tmdb.service';
+import { Geolocation } from '@capacitor/geolocation';
+import { latLng, Map, MapOptions, marker, Marker, tileLayer } from 'leaflet';
+import { defaultIcon } from 'src/app/default-marker';
 
 @Component({
   selector: 'app-create-review',
@@ -18,14 +23,34 @@ export class CreateReviewPage implements OnInit {
   comment: string;
   tmdbID: string;
   disablePublishButton: boolean = true;
+  picture: QimgImage;
+  public mapOptions: MapOptions;
+  mapMarkers: Marker[];
+  coordinates: number[] = [];
+  map: Map;
+  customLocation: string;
 
   constructor(
     public reviewService: ReviewService,
     // Inject the router
     private router: Router,
     public storeService: StoreService,
-    public tmdbService: TmdbService
-  ) {}
+    public tmdbService: TmdbService,
+    public pictureService: PictureService
+  ) {
+    this.mapOptions = {
+      layers: [
+        tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+        }),
+      ],
+      zoom: 13,
+      center: latLng(46.778186, 6.641524),
+    };
+    this.mapMarkers = [
+      new Marker([46.778186, 6.641524], { icon: defaultIcon }),
+    ];
+  }
 
   ngOnInit() {}
 
@@ -47,7 +72,7 @@ export class CreateReviewPage implements OnInit {
         for (let index = 0; index < proposition; index++) {
           this.movieProposition[index] = result.results[index];
         }
-        console.log(this.movieProposition);
+        // console.log(this.movieProposition);
       },
       (err) => {
         console.warn('Could not get movies', err);
@@ -55,18 +80,33 @@ export class CreateReviewPage implements OnInit {
     );
   }
 
+  addPictureToReview() {
+    this.pictureService.takeAndUploadPicture().subscribe(
+      (image) => {
+        this.picture = image;
+      },
+      (err) => {
+        console.warn('Could not upload image', err);
+      }
+    );
+  }
+
   createReview(form: NgForm) {
     if (form.valid) {
       console.log('Form is valid');
+      let mediaURL = '';
+      if (this.picture) {
+        mediaURL = this.picture.url;
+      }
       let reviewData = {
         rating: this.rating,
         comment: this.comment,
         date: this.date,
         location: {
           type: 'Point',
-          coordinate: [6.647778558579233, 46.78060279685718],
+          coordinates: [this.coordinates[0], this.coordinates[1]],
         },
-        medias: [],
+        medias: mediaURL,
         tmdbID: this.tmdbID,
       };
       console.log('add movie', reviewData);
@@ -77,7 +117,8 @@ export class CreateReviewPage implements OnInit {
           result.date = new Date(result.date)
             .toLocaleDateString('fr')
             .toString();
-          this.storeService.setCurrentReview(result);
+          this.storeService.addNewReview(result);
+          this.storeService.currentReview = result;
           this.router.navigateByUrl('/review');
         },
         (err) => {
@@ -85,5 +126,28 @@ export class CreateReviewPage implements OnInit {
         }
       );
     }
+  }
+
+  async printCurrentPosition() {
+    const coordinates = await Geolocation.getCurrentPosition();
+    this.setPinPoint(coordinates.coords.latitude, coordinates.coords.longitude);
+  }
+
+  setPinPoint(lat, long) {
+    this.coordinates[0] = lat;
+    this.coordinates[1] = long;
+    this.mapMarkers[0].setLatLng([lat, long]);
+    this.map.setView(latLng(lat, long));
+  }
+
+  onMapReady(map: Map) {
+    setTimeout(() => map.invalidateSize(), 0);
+    this.map = map;
+    this.map.on('click', (ev) =>
+      this.setPinPoint(
+        map.mouseEventToLatLng(ev.originalEvent).lat,
+        map.mouseEventToLatLng(ev.originalEvent).lng
+      )
+    );
   }
 }

@@ -6,23 +6,22 @@ import { Review } from '../models/review';
   providedIn: 'root',
 })
 export class StoreService {
-  private currentReview: Review;
-  private currentMovie: Movie;
-  constructor() {
-    
-  }
+  currentReview: Review;
+  currentMovie: Movie;
+  reviews?: Review[];
+  constructor() {}
 
-  getCurrentReview() {
-    return this.currentReview;
-  }
-  setCurrentReview(review: Review) {
-    this.currentReview = review;
-  }
-
-  getCurrentMovie() {
-    return this.currentMovie;
-  }
-  setCurrentMovie(movie: Movie) {
-    this.currentMovie = movie;
+  addNewReview(review) {
+    this.reviews.push(review);
+    this.reviews.sort((a, b) => {
+      let date1 = new Date(parseInt(a.date.split('/')[2]), parseInt(a.date.split('/')[1]), parseInt(a.date.split('/')[0]));
+      let date2 = new Date(parseInt(b.date.split('/')[2]), parseInt(b.date.split('/')[1]), parseInt(b.date.split('/')[0]));
+      if (date1.getTime() < date2.getTime()) {
+        return 1;
+      } else if (date1.getTime() > date2.getTime()) {
+        return -1;
+      }
+      return 0;
+    });
   }
 }

@@ -15,7 +15,7 @@ export class MoviePage implements OnInit {
   constructor(public storeService: StoreService, public router: Router) {}
 
   ngOnInit() {
-    this.movie = this.storeService.getCurrentMovie();
+    this.movie = this.storeService.currentMovie;
   }
 
   movies() {

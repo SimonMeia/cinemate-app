@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { ViewWillEnter } from '@ionic/angular';
+import { ViewDidEnter, ViewDidLeave, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { ReviewService } from 'src/app/api/review.service';
 import { Review } from 'src/app/models/review';
@@ -13,8 +13,7 @@ import { StoreService } from 'src/app/store/store.service';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit, ViewWillEnter {
-  reviews: Review[];
+export class HomePage implements ViewWillEnter, ViewDidEnter, ViewWillLeave, ViewDidLeave {
 
   constructor(
     // Inject the authentication provider.
@@ -28,10 +27,20 @@ export class HomePage implements OnInit, ViewWillEnter {
     public storeService: StoreService
   ) {}
 
+  ionViewDidEnter(): void {
+      console.log('Did Enter')
+  }
+  ionViewDidLeave(): void {
+      console.log('Did Leave')
+  }
+  ionViewWillLeave(): void {
+      console.log('Will Leave')
+  }
   ionViewWillEnter(): void {
+    console.log('Will Enter')
     this.reviewService.getReviewsFromMyGroups().subscribe(
       (result) => {
-        console.log("result : ", result);
+        // console.log("result : ", result);
         console.log("result.data", result.data)
         result.data.sort((a, b) => {
             let date1 = new Date(a.date)
@@ -44,7 +53,7 @@ export class HomePage implements OnInit, ViewWillEnter {
             return 0
         })
         result.data.forEach((review) => review.date = new Date(review.date).toLocaleDateString('fr').toString())
-        this.reviews = result.data
+        this.storeService.reviews = result.data;
       },
       (err) => {
         console.warn('Could not get reviews', err);
@@ -52,7 +61,6 @@ export class HomePage implements OnInit, ViewWillEnter {
     );
   }
 
-  ngOnInit() {}
 
   // Add a method to log out.
   logOut() {
@@ -66,7 +74,7 @@ export class HomePage implements OnInit, ViewWillEnter {
   }
 
   displayReview(review){
-    this.storeService.setCurrentReview(review)
-    this.router.navigateByUrl('/review')
+    this.storeService.currentReview = review
+    this.router.navigate(['/review'])
   }
 }

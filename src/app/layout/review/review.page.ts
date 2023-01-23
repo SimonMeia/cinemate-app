@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Review } from 'src/app/models/review';
 import { StoreService } from 'src/app/store/store.service';
+import { latLng, Map, MapOptions, marker, Marker, tileLayer } from 'leaflet';
+import { defaultIcon } from 'src/app/default-marker';
 
 @Component({
   selector: 'app-review',
@@ -11,36 +13,40 @@ import { StoreService } from 'src/app/store/store.service';
 export class ReviewPage implements OnInit {
   public review: Review;
   public rating: Array<string>;
+  public mapOptions: MapOptions;
+  mapMarkers: Marker[];
 
-  constructor(public storeService: StoreService, private router: Router) {}
+  constructor(public storeService: StoreService, private router: Router) {
+    this.mapOptions = {
+      layers: [
+        tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+        }),
+      ],
+      zoom: 13,
+      center: latLng(46.778186, 6.641524),
+    };
+  }
 
   ngOnInit() {
-    this.review = this.storeService.getCurrentReview();
-    // this.review = {
-    //   id: 'id',
-    //   comment: 'Pas mal',
-    //   date: '10.10.2022',
-    //   movie: {
-    //     id: 'id',
-    //     moviePeople: [{ id: 'id', name: 'nom' }],
-    //     posterURL: '/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg',
-    //     title: 'Avatar',
-    //     releaseDate: '2009-12-15T00:00:00.000Z',
-    //     tmdbID: 12121212,
-    //     Genre: [{ id: 'id', name: 'nom' }],
-    //   },
-    //   rating: 4,
-    //   user: {
-    //     email:'email',
-    //     firstName: 'Simon',
-    //     lastName: 'Meia',
-    //     groups:['id group'],
-    //     id:'id',
-    //     password: '1234',
-    //     registrationDate:'date',
-    //     role:'admin'
-    //   }
-    // };
+    this.review = this.storeService.currentReview;
+    if (this.review.location) {
+      this.mapMarkers = [
+        marker(
+          [
+            this.review.location.coordinates[0],
+            this.review.location.coordinates[1],
+          ],
+          { icon: defaultIcon }
+        ),
+      ];
+    }
+    this.mapOptions.center = latLng(
+      this.review.location.coordinates[0],
+      this.review.location.coordinates[1]
+    );
+    console.log(this.review);
+
     this.rating = [];
     for (let index = 1; index <= 5; index++) {
       if (index <= this.review.rating) {
@@ -52,5 +58,9 @@ export class ReviewPage implements OnInit {
   }
   home() {
     this.router.navigateByUrl('/home');
+  }
+
+  onMapReady(map: Map) {
+    setTimeout(() => map.invalidateSize(), 0);
   }
 }
