@@ -9,6 +9,7 @@ import { TmdbService } from 'src/app/tmdb/tmdb.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { latLng, Map, MapOptions, marker, Marker, tileLayer } from 'leaflet';
 import { defaultIcon } from 'src/app/default-marker';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-create-review',
@@ -34,9 +35,10 @@ export class CreateReviewPage implements OnInit {
     public reviewService: ReviewService,
     // Inject the router
     private router: Router,
-    public storeService: StoreService,
-    public tmdbService: TmdbService,
-    public pictureService: PictureService
+    private storeService: StoreService,
+    private tmdbService: TmdbService,
+    private pictureService: PictureService,
+    private toastController: ToastController
   ) {
     this.mapOptions = {
       layers: [
@@ -50,6 +52,7 @@ export class CreateReviewPage implements OnInit {
     this.mapMarkers = [
       new Marker([46.778186, 6.641524], { icon: defaultIcon }),
     ];
+    this.coordinates = [46.778186, 6.641524]
   }
 
   ngOnInit() {}
@@ -57,22 +60,18 @@ export class CreateReviewPage implements OnInit {
   createReviewForm(form: NgForm) {}
 
   lookForMovie() {
-    console.log(this.movie);
     this.movieProposition = [];
     this.tmdbService.getMovie(this.movie).subscribe(
       (result) => {
-        console.log('movie : ', result);
         let proposition: number;
         if (result.results.length > 5) {
           proposition = 5;
         } else {
           proposition = result.results.length;
         }
-
         for (let index = 0; index < proposition; index++) {
           this.movieProposition[index] = result.results[index];
         }
-        // console.log(this.movieProposition);
       },
       (err) => {
         console.warn('Could not get movies', err);
@@ -93,7 +92,6 @@ export class CreateReviewPage implements OnInit {
 
   createReview(form: NgForm) {
     if (form.valid) {
-      console.log('Form is valid');
       let mediaURL = '';
       if (this.picture) {
         mediaURL = this.picture.url;
@@ -109,16 +107,20 @@ export class CreateReviewPage implements OnInit {
         medias: mediaURL,
         tmdbID: this.tmdbID,
       };
-      console.log('add movie', reviewData);
 
       this.reviewService.addReviewToDatabase(reviewData).subscribe(
-        (result) => {
-          console.log('new review : ', result);
+        async (result) => {
           result.date = new Date(result.date)
             .toLocaleDateString('fr')
             .toString();
           this.storeService.addNewReview(result);
           this.storeService.currentReview = result;
+          const toast = await this.toastController.create({
+            message: 'Review Added',
+            duration: 1500,
+            position: 'top'
+          });
+          await toast.present();
           this.router.navigateByUrl('/review');
         },
         (err) => {

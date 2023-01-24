@@ -1,4 +1,4 @@
 export type MoviePeople = {
-    id: string,
+    _id: string,
     name: string
 };

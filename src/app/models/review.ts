@@ -3,7 +3,7 @@ import { User } from "./user"
 import { Location } from "./location";
 
 export type Review = {
-    id: string,
+    _id: string,
     rating: number,
     comment: string,
     date: string,

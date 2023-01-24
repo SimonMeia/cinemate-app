@@ -4,6 +4,9 @@ import { Review } from 'src/app/models/review';
 import { StoreService } from 'src/app/store/store.service';
 import { latLng, Map, MapOptions, marker, Marker, tileLayer } from 'leaflet';
 import { defaultIcon } from 'src/app/default-marker';
+import { AuthService } from 'src/app/auth/auth.service';
+import { ReviewService } from 'src/app/api/review.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-review',
@@ -15,8 +18,15 @@ export class ReviewPage implements OnInit {
   public rating: Array<string>;
   public mapOptions: MapOptions;
   mapMarkers: Marker[];
+  showDeleteButton: boolean = false;
 
-  constructor(public storeService: StoreService, private router: Router) {
+  constructor(
+    public storeService: StoreService,
+    private router: Router,
+    private authService: AuthService,
+    private reviewService: ReviewService,
+    private toastController: ToastController
+  ) {
     this.mapOptions = {
       layers: [
         tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -29,24 +39,27 @@ export class ReviewPage implements OnInit {
   }
 
   ngOnInit() {
+    this.loadReview();
+  }
+
+  loadReview() {
+    // Get la review
     this.review = this.storeService.currentReview;
-    if (this.review.location) {
-      this.mapMarkers = [
-        marker(
-          [
-            this.review.location.coordinates[0],
-            this.review.location.coordinates[1],
-          ],
-          { icon: defaultIcon }
-        ),
-      ];
-    }
+    // Ajoute le marker et déplace la carte
+    this.mapMarkers = [
+      marker(
+        [
+          this.review.location.coordinates[0],
+          this.review.location.coordinates[1],
+        ],
+        { icon: defaultIcon }
+      ),
+    ];
     this.mapOptions.center = latLng(
       this.review.location.coordinates[0],
       this.review.location.coordinates[1]
     );
-    console.log(this.review);
-
+    // Met en forme les étoiles
     this.rating = [];
     for (let index = 1; index <= 5; index++) {
       if (index <= this.review.rating) {
@@ -55,9 +68,43 @@ export class ReviewPage implements OnInit {
         this.rating.push('star-outline');
       }
     }
+    // Affiche ou non la supression
+    this.authService.getUser$().subscribe(
+      (user) => {
+        if (this.review.user._id == user._id) {
+          this.showDeleteButton = true;
+        }
+      },
+      (err) => {
+        console.warn('Could not get user', err);
+      }
+    );
   }
+
   home() {
     this.router.navigateByUrl('/home');
+  }
+
+  delete() {
+    console.log(this.review);
+
+    this.reviewService.deleteReview(this.review._id).subscribe(
+      async (response) => {
+        if (response.deleteCount == 1) {
+          this.storeService.deleteReview(this.review._id);
+          const toast = await this.toastController.create({
+            message: 'Review deleted',
+            duration: 1500,
+            position: 'top',
+          });
+          await toast.present();
+          this.home();
+        }
+      },
+      (err) => {
+        console.warn('Could not get user', err);
+      }
+    );
   }
 
   onMapReady(map: Map) {

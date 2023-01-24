@@ -2,7 +2,7 @@ import { Genre } from "./genre";
 import { MoviePeople } from "./moviePeople";
 
 export type Movie = {
-    id: string,
+    _id: string,
     title: string,
     posterURL: string,
     backdropURL: string,

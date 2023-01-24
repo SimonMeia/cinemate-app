@@ -32,4 +32,7 @@
     [leafletLayers]="mapMarkers"
     (leafletMapReady)="onMapReady($event)"
   ></div>
+  <ion-button expand="block" (click)="delete()" color="danger">
+    Delete
+  </ion-button>
 </ion-content>

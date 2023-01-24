@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Profil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1>{{user.firstName}} {{user.lastName}}</h1>
+  <div id="profile-stats">
+    <div>
+      <h2>Reviews</h2>
+      {{reviewsCount}}
+    </div>
+    <div>
+      <h2>Groupes</h2>
+      {{groupsCount}}
+    </div>
+  </div>
+  <h2>Carte des films</h2>
+  <div
+    class="leaflet-map"
+    leaflet
+    [leafletOptions]="mapOptions"
+    [leafletLayers]="mapMarkers"
+    (leafletMapReady)="onMapReady($event)"
+  ></div>
+</ion-content>

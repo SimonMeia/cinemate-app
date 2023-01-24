@@ -1,0 +1,14 @@
+#profile-stats{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;    
+}
+
+#profile-stats div{
+    text-align: center;
+    flex-grow: 1;
+}
+
+.leaflet-map{
+    height: 200px;
+}

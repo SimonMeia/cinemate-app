@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { ViewDidEnter, ViewDidLeave, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
-import { environment } from 'src/environments/environment';
+import { ViewWillEnter } from '@ionic/angular';
 import { ReviewService } from 'src/app/api/review.service';
-import { Review } from 'src/app/models/review';
 import { StoreService } from 'src/app/store/store.service';
 
 @Component({
@@ -13,8 +11,7 @@ import { StoreService } from 'src/app/store/store.service';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements ViewWillEnter, ViewDidEnter, ViewWillLeave, ViewDidLeave {
-
+export class HomePage implements ViewWillEnter {
   constructor(
     // Inject the authentication provider.
     private auth: AuthService,
@@ -27,32 +24,25 @@ export class HomePage implements ViewWillEnter, ViewDidEnter, ViewWillLeave, Vie
     public storeService: StoreService
   ) {}
 
-  ionViewDidEnter(): void {
-      console.log('Did Enter')
-  }
-  ionViewDidLeave(): void {
-      console.log('Did Leave')
-  }
-  ionViewWillLeave(): void {
-      console.log('Will Leave')
-  }
   ionViewWillEnter(): void {
-    console.log('Will Enter')
     this.reviewService.getReviewsFromMyGroups().subscribe(
       (result) => {
-        // console.log("result : ", result);
-        console.log("result.data", result.data)
         result.data.sort((a, b) => {
-            let date1 = new Date(a.date)
-            let date2 = new Date (b.date)
-            if(date1.getTime() < date2.getTime()){
-                return 1
-            }else if (date1.getTime() > date2.getTime()){
-                return -1
-            }
-            return 0
-        })
-        result.data.forEach((review) => review.date = new Date(review.date).toLocaleDateString('fr').toString())
+          let date1 = new Date(a.date);
+          let date2 = new Date(b.date);
+          if (date1.getTime() < date2.getTime()) {
+            return 1;
+          } else if (date1.getTime() > date2.getTime()) {
+            return -1;
+          }
+          return 0;
+        });
+        result.data.forEach(
+          (review) =>
+            (review.date = new Date(review.date)
+              .toLocaleDateString('fr')
+              .toString())
+        );
         this.storeService.reviews = result.data;
       },
       (err) => {
@@ -61,7 +51,6 @@ export class HomePage implements ViewWillEnter, ViewDidEnter, ViewWillLeave, Vie
     );
   }
 
-
   // Add a method to log out.
   logOut() {
     console.log('logging out...');
@@ -69,12 +58,12 @@ export class HomePage implements ViewWillEnter, ViewDidEnter, ViewWillLeave, Vie
     this.router.navigateByUrl('/login');
   }
 
-  addReview(){
-    this.router.navigateByUrl('/create-review')
+  addReview() {
+    this.router.navigateByUrl('/create-review');
   }
 
-  displayReview(review){
-    this.storeService.currentReview = review
-    this.router.navigate(['/review'])
+  displayReview(review) {
+    this.storeService.currentReview = review;
+    this.router.navigate(['/review']);
   }
 }
