@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Group } from '../models/genre copy';
 import { Movie } from '../models/movie';
 import { Review } from '../models/review';
 
@@ -8,7 +9,9 @@ import { Review } from '../models/review';
 export class StoreService {
   currentReview: Review;
   currentMovie: Movie;
+  currentGroup: Group;
   reviews: Review[] = [];
+  groups: Group[] = []
   constructor() {}
 
   addNewReview(review: Review) {
