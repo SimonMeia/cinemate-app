@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Review } from 'src/app/models/review';
 import { StoreService } from 'src/app/store/store.service';
@@ -14,11 +14,12 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./review.page.scss'],
 })
 export class ReviewPage implements OnInit {
-  public review: Review;
-  public rating: Array<string>;
-  public mapOptions: MapOptions;
+  review: Review;
+  rating: Array<string>;
+  mapOptions: MapOptions;
   mapMarkers: Marker[];
   showDeleteButton: boolean = false;
+  backPage: string;
 
   constructor(
     public storeService: StoreService,
@@ -40,6 +41,7 @@ export class ReviewPage implements OnInit {
 
   ngOnInit() {
     this.loadReview();
+    this.backPage = this.storeService.backPage;
   }
 
   loadReview() {
@@ -82,7 +84,7 @@ export class ReviewPage implements OnInit {
   }
 
   home() {
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl(this.backPage);
   }
 
   delete() {

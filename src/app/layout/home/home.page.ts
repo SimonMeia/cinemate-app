@@ -12,6 +12,7 @@ import { StoreService } from 'src/app/store/store.service';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements ViewWillEnter {
+
   constructor(
     // Inject the authentication provider.
     private auth: AuthService,
@@ -23,6 +24,7 @@ export class HomePage implements ViewWillEnter {
     public reviewService: ReviewService,
     public storeService: StoreService
   ) {}
+
 
   ionViewWillEnter(): void {
     this.reviewService.getReviewsFromMyGroups().subscribe(
@@ -64,6 +66,7 @@ export class HomePage implements ViewWillEnter {
 
   displayReview(review) {
     this.storeService.currentReview = review;
+    this.storeService.backPage = "/home"
     this.router.navigate(['/review']);
   }
 }

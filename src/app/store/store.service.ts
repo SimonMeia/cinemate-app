@@ -11,7 +11,8 @@ export class StoreService {
   currentMovie: Movie;
   currentGroup: Group;
   reviews: Review[] = [];
-  groups: Group[] = []
+  groups: Group[] = [];
+  backPage: string;
   constructor() {}
 
   addNewReview(review: Review) {

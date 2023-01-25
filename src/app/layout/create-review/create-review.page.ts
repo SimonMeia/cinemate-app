@@ -52,7 +52,7 @@ export class CreateReviewPage implements OnInit {
     this.mapMarkers = [
       new Marker([46.778186, 6.641524], { icon: defaultIcon }),
     ];
-    this.coordinates = [46.778186, 6.641524]
+    this.coordinates = [46.778186, 6.641524];
   }
 
   ngOnInit() {}
@@ -118,9 +118,11 @@ export class CreateReviewPage implements OnInit {
           const toast = await this.toastController.create({
             message: 'Review Added',
             duration: 1500,
-            position: 'top'
+            position: 'top',
           });
           await toast.present();
+
+          this.storeService.backPage = '/home';
           this.router.navigateByUrl('/review');
         },
         (err) => {

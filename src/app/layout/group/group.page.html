@@ -9,4 +9,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content class="ion-padding">
+  <h1>{{group.name}}</h1>
+  <p>{{group.description}}</p>
+  <h2>Membres</h2>
+  <ion-item *ngFor="let user of members">
+    <ion-label>
+      <h3>{{user.firstName}} {{user.lastName}}</h3>
+    </ion-label>
+  </ion-item>
+  <h2>Reviews</h2>
+  <div *ngFor="let review of reviews">
+    <app-review [review]="review" (click)="displayReview(review)"></app-review>
+  </div>
+</ion-content>

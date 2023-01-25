@@ -13,8 +13,6 @@ import { StoreService } from 'src/app/store/store.service';
   styleUrls: ['./groups.page.scss'],
 })
 export class GroupsPage implements ViewWillEnter {
-
-
   constructor(
     // Inject the HTTP client
     public http: HttpClient,
@@ -30,22 +28,21 @@ export class GroupsPage implements ViewWillEnter {
     this.authService.getUser$().subscribe(
       (user) => {
         this.groupService.getAllUserGroups(user._id).subscribe(
-            (groups) => {
-              console.log('groups : ', groups);
-              this.storeService.groups = groups;
-            },
-            (err) => {
-              console.warn('Could not get groups', err);
-            }
-          );
+          (groups) => {
+            this.storeService.groups = groups;
+          },
+          (err) => {
+            console.warn('Could not get groups', err);
+          }
+        );
       },
       (err) => {
         console.warn('Could not get user', err);
       }
     );
   }
-  displayGroup(group : Group){
-    this.storeService.currentGroup = group
-    this.router.navigateByUrl("/group")
+  displayGroup(group: Group) {
+    this.storeService.currentGroup = group;
+    this.router.navigateByUrl('/group');
   }
 }
