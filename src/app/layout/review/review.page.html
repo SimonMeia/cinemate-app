@@ -10,11 +10,10 @@
 </ion-header>
 <ion-content class="ion-padding">
   <img
-    alt="Silhouette of mountains"
+    alt="{{review.movie.title}} backdrop image"
     src="https://image.tmdb.org/t/p/original/{{review.movie.backdropURL}}"
   />
   <h1>{{review.movie.title}}</h1>
-  <!-- <h2>Auteur :</h2> -->
   <p>{{review.user.firstName}} {{review.user.lastName}}, {{review.date}}</p>
   <h2>Note :</h2>
   <div>
@@ -24,7 +23,7 @@
   </div>
   <h2>Commentaire :</h2>
   <p>{{review.comment}}</p>
-  <img *ngIf="review.medias" [src]="review.medias" />
+  <img *ngIf="review.medias" [src]="review.medias" alt="Photo of the review"/>
   <div
     class="leaflet-map"
     leaflet
@@ -32,7 +31,12 @@
     [leafletLayers]="mapMarkers"
     (leafletMapReady)="onMapReady($event)"
   ></div>
-  <ion-button expand="block" (click)="delete()" color="danger">
+  <ion-button
+    expand="block"
+    (click)="delete()"
+    color="danger"
+    *ngIf="showDeleteButton"
+  >
     Delete
   </ion-button>
 </ion-content>

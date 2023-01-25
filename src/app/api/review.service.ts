@@ -12,8 +12,12 @@ import { ReviewsFromMyGroups } from '../models/reviewsFromMyGroups';
 export class ReviewService {
   constructor(private http: HttpClient) {}
 
-  getAllUserReviews(id: string): Observable<Review[]> {
-    const url = `${environment.apiUrl}/reviews/users/${id}`;
+  getAllUserReviews(userId: string): Observable<Review[]> {
+    const url = `${environment.apiUrl}/reviews/users/${userId}`;
+    return this.http.get<Review[]>(url);
+  }
+  getGroupReviews(groupId: string): Observable<Review[]> {
+    const url = `${environment.apiUrl}/reviews/groups/${groupId}`;
     return this.http.get<Review[]>(url);
   }
   getReviewsFromMyGroups(): Observable<ReviewsFromMyGroups> {
@@ -26,8 +30,32 @@ export class ReviewService {
     return this.http.post<Review>(url, reviewData);
   }
 
-  deleteReview(id: string): Observable<DeleteResponse> {
-    const url = `${environment.apiUrl}/reviews/${id}`;
+  deleteReview(reviewId: string): Observable<DeleteResponse> {
+    const url = `${environment.apiUrl}/reviews/${reviewId}`;
     return this.http.delete<DeleteResponse>(url);
+  }
+  getMovieReviews(movieId: string): Observable<Review[]> {
+    const url = `${environment.apiUrl}/reviews/movies/${movieId}`;
+    return this.http.get<Review[]>(url);
+  }
+
+  dateFormat(review: Review[]): Review[] {
+    review.sort((a, b) => {
+        let date1 = new Date(a.date);
+        let date2 = new Date(b.date);
+        if (date1.getTime() < date2.getTime()) {
+          return 1;
+        } else if (date1.getTime() > date2.getTime()) {
+          return -1;
+        }
+        return 0;
+      });
+      review.forEach(
+        (review) =>
+          (review.date = new Date(review.date)
+            .toLocaleDateString('fr')
+            .toString())
+      );
+      return review
   }
 }

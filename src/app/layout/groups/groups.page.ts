@@ -13,6 +13,8 @@ import { StoreService } from 'src/app/store/store.service';
   styleUrls: ['./groups.page.scss'],
 })
 export class GroupsPage implements ViewWillEnter {
+  groupsSearch: Group[];
+  displaySearchResult: boolean = false;
   constructor(
     // Inject the HTTP client
     public http: HttpClient,
@@ -27,9 +29,15 @@ export class GroupsPage implements ViewWillEnter {
   ionViewWillEnter(): void {
     this.authService.getUser$().subscribe(
       (user) => {
-        this.groupService.getAllUserGroups(user._id).subscribe(
+        console.log(user);
+
+        this.groupService.getAllGroups().subscribe(
           (groups) => {
-            this.storeService.groups = groups;
+            this.storeService.allGroups = groups;
+            // this.userGroups = [...this.allGroups].filter(g => user.groups.includes(g._id))
+            this.storeService.myGroups = [...this.storeService.allGroups].filter((g) =>
+              user.groups.includes(g._id)
+            );
           },
           (err) => {
             console.warn('Could not get groups', err);
@@ -44,5 +52,18 @@ export class GroupsPage implements ViewWillEnter {
   displayGroup(group: Group) {
     this.storeService.currentGroup = group;
     this.router.navigateByUrl('/group');
+  }
+
+  search(event) {
+    let nameToSearch: string = event.detail.value;
+    this.groupsSearch = this.storeService.allGroups.filter((g) =>
+      g.name.toLowerCase().includes(nameToSearch.toLowerCase())
+    );
+
+    if (nameToSearch != '') {
+      this.displaySearchResult = true;
+    } else {
+      this.displaySearchResult = false;
+    }
   }
 }

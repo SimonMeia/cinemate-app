@@ -18,6 +18,7 @@ import {
 import { Router } from '@angular/router';
 import { ViewWillEnter } from '@ionic/angular';
 import { StoreService } from 'src/app/store/store.service';
+import { UserService } from 'src/app/api/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -38,7 +39,7 @@ export class ProfilePage implements ViewWillEnter {
   constructor(
     private authService: AuthService,
     private reviewService: ReviewService,
-    private groupService: GroupService,
+    private userService: UserService,
     private router: Router,
     private storeService: StoreService
   ) {
@@ -54,18 +55,22 @@ export class ProfilePage implements ViewWillEnter {
   }
 
   ionViewWillEnter(): void {
+    
     this.authService.getUser$().subscribe(
       (user) => {
         this.user = user;
-        this.groupService.getAllUserGroups(this.user._id).subscribe(
-          (groups) => {
-            this.groups = groups;
-            this.groupsCount = groups.length;
-          },
-          (err) => {
-            console.warn('Could not get reviews', err);
-          }
-        );
+        
+        if (this.user) {
+          this.userService.getAllUserGroups(this.user._id).subscribe(
+            (groups) => {
+              this.groups = groups;
+              this.groupsCount = groups.length;
+            },
+            (err) => {
+              console.warn('Could not get reviews', err);
+            }
+          );
+        }
       },
       (err) => {
         console.warn('Could not get user', err);
@@ -73,17 +78,15 @@ export class ProfilePage implements ViewWillEnter {
     );
     this.reviewService.getAllUserReviews(this.user._id).subscribe(
       (reviews) => {
-        this.reviews = reviews;
-        this.reviewsCount = reviews.length
-        this.loadMap()
+        this.reviews = this.reviewService.dateFormat(reviews);
+        this.reviewsCount = reviews.length;
+        this.loadMap();
       },
       (err) => {
         console.warn('Could not get reviews', err);
       }
     );
   }
-
-  loadUserData() {}
 
   loadMap() {
     this.mapMarkers = this.reviews.map((r) =>
@@ -96,8 +99,7 @@ export class ProfilePage implements ViewWillEnter {
       const latLngTuple: LatLngTuple = [m.getLatLng().lat, m.getLatLng().lng];
       return latLngTuple;
     });
-
-    this.map.fitBounds(latLngArray);
+    if (latLngArray.length > 0) this.map.fitBounds(latLngArray);
   }
   onMapReady(map: Map) {
     setTimeout(() => map.invalidateSize(), 0);

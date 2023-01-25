@@ -12,12 +12,13 @@ export class GroupService {
 
     constructor(private http: HttpClient) {}
 
-  getAllUserGroups(id: string): Observable<Group[]> {
-    const url = `${environment.apiUrl}/users/${id}/groups`;
+  getAllGroups(): Observable<Group[]> {
+    const url = `${environment.apiUrl}/groups`;
     return this.http.get<Group[]>(url);
   }
   getAllUsersFromGroup(id: string): Observable<User[]> {
     const url = `${environment.apiUrl}/groups/${id}/users/`;
     return this.http.get<User[]>(url);
   }
+
 }

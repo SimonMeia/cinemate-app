@@ -1,19 +1,19 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { ReplaySubject, Observable, from, delayWhen } from "rxjs";
-import { map } from "rxjs/operators";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ReplaySubject, Observable, from, delayWhen } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { AuthResponse } from "../models/auth-response";
-import { User } from "../models/user";
-import { AuthRequest } from "../models/auth-request";
-import { Storage } from "@ionic/storage";
+import { AuthResponse } from '../models/auth-response';
+import { User } from '../models/user';
+import { AuthRequest } from '../models/auth-request';
+import { Storage } from '@ionic/storage';
 
-import { environment } from "src/environments/environment";
+import { environment } from 'src/environments/environment';
 
 /**
  * Authentication service for login/logout.
  */
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   #auth$: ReplaySubject<AuthResponse | undefined>;
 
@@ -30,6 +30,25 @@ export class AuthService {
 
   getUser$(): Observable<User> {
     return this.#auth$.pipe(map((auth) => auth?.user));
+  }
+
+  removeGroupFromUser$(groupId: string): Observable<User> {
+    return this.#auth$.pipe(
+      map((auth) => {
+        auth.user.groups.splice(auth?.user.groups.indexOf(groupId), 1);
+        this.storage.set('auth', auth)
+        return auth?.user;
+      })
+    );
+  }
+  addUserToGroup$(groupId: string): Observable<User> {
+    return this.#auth$.pipe(
+      map((auth) => {
+        auth.user.groups.push(groupId)
+        this.storage.set('auth', auth);
+        return auth?.user;
+      })
+    );
   }
 
   getToken$(): Observable<string> {

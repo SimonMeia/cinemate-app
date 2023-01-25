@@ -27,23 +27,7 @@ export class HomePage implements ViewWillEnter {
   ionViewWillEnter(): void {
     this.reviewService.getReviewsFromMyGroups().subscribe(
       (result) => {
-        result.data.sort((a, b) => {
-          let date1 = new Date(a.date);
-          let date2 = new Date(b.date);
-          if (date1.getTime() < date2.getTime()) {
-            return 1;
-          } else if (date1.getTime() > date2.getTime()) {
-            return -1;
-          }
-          return 0;
-        });
-        result.data.forEach(
-          (review) =>
-            (review.date = new Date(review.date)
-              .toLocaleDateString('fr')
-              .toString())
-        );
-        this.storeService.reviews = result.data;
+        this.storeService.reviews = this.reviewService.dateFormat(result.data);
       },
       (err) => {
         console.warn('Could not get reviews', err);

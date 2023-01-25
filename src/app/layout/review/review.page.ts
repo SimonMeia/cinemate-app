@@ -39,13 +39,14 @@ export class ReviewPage implements OnInit {
     };
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadReview();
     this.backPage = this.storeService.backPage;
   }
 
   loadReview() {
     // Get la review
+
     this.review = this.storeService.currentReview;
     // Ajoute le marker et déplace la carte
     this.mapMarkers = [
@@ -73,8 +74,10 @@ export class ReviewPage implements OnInit {
     // Affiche ou non la supression
     this.authService.getUser$().subscribe(
       (user) => {
-        if (this.review.user._id == user._id) {
+        if (user && this.review.user._id == user._id) {
           this.showDeleteButton = true;
+        } else {
+          this.showDeleteButton = false;
         }
       },
       (err) => {
@@ -88,8 +91,6 @@ export class ReviewPage implements OnInit {
   }
 
   delete() {
-    console.log(this.review);
-
     this.reviewService.deleteReview(this.review._id).subscribe(
       async (response) => {
         if (response.deleteCount == 1) {

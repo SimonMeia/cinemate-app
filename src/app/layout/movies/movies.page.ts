@@ -20,7 +20,6 @@ export class MoviesPage implements ViewWillEnter {
   recentRelease: Movie[];
   recentReview: Movie[];
   bestMovies: any;
-  reviews: Review[];
 
   constructor(
     // Inject the HTTP client
@@ -38,7 +37,7 @@ export class MoviesPage implements ViewWillEnter {
         this.setupCategories();
       },
       (err) => {
-        console.warn('Could not get reviews', err);
+        console.warn('Could not get movies', err);
       }
     );
   }
