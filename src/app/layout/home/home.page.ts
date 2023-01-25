@@ -14,8 +14,6 @@ import { StoreService } from 'src/app/store/store.service';
 export class HomePage implements ViewWillEnter {
 
   constructor(
-    // Inject the authentication provider.
-    private auth: AuthService,
     // Inject the router
     private router: Router,
     // Inject the HTTP client
@@ -51,13 +49,6 @@ export class HomePage implements ViewWillEnter {
         console.warn('Could not get reviews', err);
       }
     );
-  }
-
-  // Add a method to log out.
-  logOut() {
-    console.log('logging out...');
-    this.auth.logOut();
-    this.router.navigateByUrl('/login');
   }
 
   addReview() {

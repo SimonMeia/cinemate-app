@@ -1,11 +1,21 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Profil</ion-title>
+    <ion-buttons slot="start">
+      <ion-button [routerLink]="['/home']">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="logOut()">
+        <ion-icon name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h1>{{user.firstName}} {{user.lastName}}</h1>
+  <h1 *ngIf="user">{{user.firstName}} {{user.lastName}}</h1>
   <div id="profile-stats">
     <div>
       <h2>Reviews</h2>
@@ -24,4 +34,8 @@
     [leafletLayers]="mapMarkers"
     (leafletMapReady)="onMapReady($event)"
   ></div>
+  <h2>Mes dernière reviews</h2>
+  <div *ngFor="let review of reviews">
+    <app-review [review]="review" (click)="displayReview(review)"></app-review>
+  </div>
 </ion-content>

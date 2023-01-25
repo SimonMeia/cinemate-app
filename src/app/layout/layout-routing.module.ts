@@ -10,48 +10,57 @@ const routes: Routes = [
     children: [
       {
         path: 'home',
-        loadChildren: () => import('./home/home.module').then(m => m.HomePageModule),
+        loadChildren: () =>
+          import('./home/home.module').then((m) => m.HomePageModule),
       },
       {
         path: 'movies',
-        loadChildren: () => import('./movies/movies.module').then(m => m.MoviesPageModule)
+        loadChildren: () =>
+          import('./movies/movies.module').then((m) => m.MoviesPageModule),
       },
       {
         path: 'groups',
-        loadChildren: () => import('./groups/groups.module').then(m => m.GroupsPageModule)
+        loadChildren: () =>
+          import('./groups/groups.module').then((m) => m.GroupsPageModule),
       },
       {
-        path: "",
-        redirectTo: "home",
-        pathMatch: "full",
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
       },
-    ]
+    ],
   },
   {
     path: 'create-review',
-    loadChildren: () => import('./create-review/create-review.module').then( m => m.CreateReviewPageModule)
-  },
-  {
-    path: 'review',
-    loadChildren: () => import('./review/review.module').then( m => m.ReviewPageModule)
-  },
-  {
-    path: 'movie',
-    loadChildren: () => import('./movie/movie.module').then( m => m.MoviePageModule)
+    loadChildren: () =>
+      import('./create-review/create-review.module').then(
+        (m) => m.CreateReviewPageModule
+      ),
   },
   {
     path: 'profile',
-    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+    loadChildren: () =>
+      import('./profile/profile.module').then((m) => m.ProfilePageModule),
+  },
+  {
+    path: 'review',
+    loadChildren: () =>
+      import('./review/review.module').then((m) => m.ReviewPageModule),
+  },
+  {
+    path: 'movie',
+    loadChildren: () =>
+      import('./movie/movie.module').then((m) => m.MoviePageModule),
   },
   {
     path: 'group',
-    loadChildren: () => import('./group/group.module').then( m => m.GroupPageModule)
+    loadChildren: () =>
+      import('./group/group.module').then((m) => m.GroupPageModule),
   },
-
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class LayoutPageRoutingModule { }
+export class LayoutPageRoutingModule {}

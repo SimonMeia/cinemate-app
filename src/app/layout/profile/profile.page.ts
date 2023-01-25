@@ -13,18 +13,19 @@ import {
   marker,
   Marker,
   tileLayer,
-  LatLngTuple, 
+  LatLngTuple,
 } from 'leaflet';
+import { Router } from '@angular/router';
+import { ViewWillEnter } from '@ionic/angular';
+import { StoreService } from 'src/app/store/store.service';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage implements ViewWillEnter {
   id: string;
-  firstName: string;
-  lastName: string;
   reviews: Review[];
   reviewsCount: number;
   groups: Group[];
@@ -37,7 +38,9 @@ export class ProfilePage implements OnInit {
   constructor(
     private authService: AuthService,
     private reviewService: ReviewService,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private router: Router,
+    private storeService: StoreService
   ) {
     this.mapOptions = {
       layers: [
@@ -50,40 +53,37 @@ export class ProfilePage implements OnInit {
     };
   }
 
-  ngOnInit(): void {
+  ionViewWillEnter(): void {
     this.authService.getUser$().subscribe(
       (user) => {
-        console.log(user);
         this.user = user;
-        this.loadUserData();
+        this.groupService.getAllUserGroups(this.user._id).subscribe(
+          (groups) => {
+            this.groups = groups;
+            this.groupsCount = groups.length;
+          },
+          (err) => {
+            console.warn('Could not get reviews', err);
+          }
+        );
       },
       (err) => {
         console.warn('Could not get user', err);
       }
     );
-  }
-
-  loadUserData() {
     this.reviewService.getAllUserReviews(this.user._id).subscribe(
       (reviews) => {
         this.reviews = reviews;
-        this.reviewsCount = reviews.length;
-        this.loadMap();
-      },
-      (err) => {
-        console.warn('Could not get reviews', err);
-      }
-    );
-    this.groupService.getAllUserGroups(this.user._id).subscribe(
-      (groups) => {
-        this.groups = groups;
-        this.groupsCount = groups.length;
+        this.reviewsCount = reviews.length
+        this.loadMap()
       },
       (err) => {
         console.warn('Could not get reviews', err);
       }
     );
   }
+
+  loadUserData() {}
 
   loadMap() {
     this.mapMarkers = this.reviews.map((r) =>
@@ -91,16 +91,27 @@ export class ProfilePage implements OnInit {
         icon: defaultIcon,
       }).bindTooltip(r.movie.title)
     );
+
     let latLngArray = this.mapMarkers.map((m) => {
       const latLngTuple: LatLngTuple = [m.getLatLng().lat, m.getLatLng().lng];
       return latLngTuple;
     });
-    console.log(latLngArray)
-    
+
     this.map.fitBounds(latLngArray);
   }
   onMapReady(map: Map) {
     setTimeout(() => map.invalidateSize(), 0);
     this.map = map;
+  }
+
+  logOut() {
+    console.log('logging out...');
+    this.router.navigateByUrl('/login');
+    this.authService.logOut();
+  }
+  displayReview(review) {
+    this.storeService.currentReview = review;
+    this.storeService.backPage = '/profile';
+    this.router.navigate(['/review']);
   }
 }

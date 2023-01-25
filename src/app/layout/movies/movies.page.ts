@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ViewWillEnter } from '@ionic/angular';
 import { MovieService } from 'src/app/api/movie.service';
 import { Movie } from 'src/app/models/movie';
+import { Review } from 'src/app/models/review';
 import { StoreService } from 'src/app/store/store.service';
 
 @Component({
@@ -13,6 +14,13 @@ import { StoreService } from 'src/app/store/store.service';
 })
 export class MoviesPage implements ViewWillEnter {
   movies: Movie[];
+  moviesSearch: Movie[];
+  displaySearchResult: boolean = false;
+  noResults: boolean;
+  recentRelease: Movie[];
+  recentReview: Movie[];
+  bestMovies: any;
+  reviews: Review[];
 
   constructor(
     // Inject the HTTP client
@@ -26,8 +34,8 @@ export class MoviesPage implements ViewWillEnter {
   ionViewWillEnter(): void {
     this.movieService.getMovies().subscribe(
       (result) => {
-        console.log('movies : ', result);
         this.movies = result;
+        this.setupCategories();
       },
       (err) => {
         console.warn('Could not get reviews', err);
@@ -36,7 +44,35 @@ export class MoviesPage implements ViewWillEnter {
   }
 
   displayMovie(movie) {
-    this.storeService.currentMovie = movie
-    this.router.navigateByUrl('movie')
+    this.storeService.currentMovie = movie;
+    this.router.navigateByUrl('movie');
+  }
+
+  search(event) {
+    let nameToSearch: string = event.detail.value;
+    this.moviesSearch = this.movies.filter((m) =>
+      m.title.toLowerCase().includes(nameToSearch.toLowerCase())
+    );
+
+    if (nameToSearch != '') {
+      this.displaySearchResult = true;
+    } else {
+      this.displaySearchResult = false;
+    }
+  }
+  setupCategories() {
+    this.recentRelease = [...this.movies].sort((a, b) => {
+      let date1 = new Date(a.releaseDate);
+      let date2 = new Date(b.releaseDate);
+      if (date1.getTime() < date2.getTime()) return 1;
+      if (date1.getTime() > date2.getTime()) return -1;
+      return 0;
+    });
+
+    this.bestMovies = [...this.movies].sort((a, b) => {
+      if (a.popularity < b.popularity) return -1;
+      if (a.popularity > b.popularity) return 1;
+      return 0;
+    });
   }
 }

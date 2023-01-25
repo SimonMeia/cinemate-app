@@ -1,13 +1,23 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Groups</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/profile']">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div>
     <h2>Mes groupes</h2>
-    <ion-item *ngFor="let group of storeService.groups" button detail="true" (click)="displayGroup(group)">
+    <ion-item
+      *ngFor="let group of storeService.groups"
+      button
+      detail="true"
+      (click)="displayGroup(group)"
+    >
       <ion-label>
         <h3>{{group.name}}</h3>
       </ion-label>

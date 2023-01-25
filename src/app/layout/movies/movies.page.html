@@ -1,24 +1,47 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Movies</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/profile']">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar (ionChange)="search($event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h1>Dernières sorties</h1>
-  <div class="movieList">
-    <app-movie
-      *ngFor="let movie of movies"
-      [movie]="movie"
-      (click)="displayMovie(movie)"
-    ></app-movie>
+  <div *ngIf="displaySearchResult">
+    <ion-list>
+      <ion-item
+        *ngFor="let movie of moviesSearch"
+        button
+        detail="true"
+        (click)="displayMovie(movie)"
+      >
+        <ion-label>{{ movie.title }}</ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-label *ngIf="moviesSearch.length == 0">Aucun film trouvé...</ion-label>
   </div>
-  <h1>Les meilleurs films</h1>
-  <div class="movieList">
-    <app-movie
-      *ngFor="let movie of movies"
-      [movie]="movie"
-      (click)="displayMovie(movie)"
-    ></app-movie>
+  <div *ngIf="!displaySearchResult">
+    <h1>Dernières sorties</h1>
+    <div class="movieList">
+      <app-movie
+        *ngFor="let movie of recentRelease"
+        [movie]="movie"
+        (click)="displayMovie(movie)"
+      ></app-movie>
+    </div>
+    <h1>Les plus populaires</h1>
+    <div class="movieList">
+      <app-movie
+        *ngFor="let movie of bestMovies"
+        [movie]="movie"
+        (click)="displayMovie(movie)"
+      ></app-movie>
+    </div>
   </div>
 </ion-content>

@@ -8,6 +8,7 @@ import { ProfilePageRoutingModule } from './profile-routing.module';
 
 import { ProfilePage } from './profile.page';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { ReviewModule } from 'src/app/components/review/review.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     FormsModule,
     IonicModule,
     ProfilePageRoutingModule,
-    LeafletModule
+    LeafletModule,
+    ReviewModule
   ],
   declarations: [ProfilePage]
 })
