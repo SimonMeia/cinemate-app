@@ -35,6 +35,7 @@ export class GroupsPage implements ViewWillEnter {
             this.storeService.myGroups = [...this.storeService.allGroups].filter((g) =>
               user.groups.includes(g._id)
             );
+            this.storeService.currentGroup = null
           },
           (err) => {
             console.warn('Could not get groups', err);

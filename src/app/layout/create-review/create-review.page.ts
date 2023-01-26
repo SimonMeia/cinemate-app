@@ -133,8 +133,16 @@ export class CreateReviewPage implements OnInit {
   }
 
   async printCurrentPosition() {
-    const coordinates = await Geolocation.getCurrentPosition();
-    this.setPinPoint(coordinates.coords.latitude, coordinates.coords.longitude);
+    Geolocation.getCurrentPosition().then(loc => {
+        this.setPinPoint(loc.coords.latitude, loc.coords.longitude);
+    }).catch(async error => {
+        const toast = await this.toastController.create({
+            message: 'Impossible de trouver la position',
+            duration: 1500,
+            position: 'top',
+          });
+          await toast.present();
+    })
   }
 
   setPinPoint(lat, long) {

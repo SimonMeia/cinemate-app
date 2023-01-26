@@ -29,12 +29,12 @@ export class CreateGroupPage implements OnInit {
   ngOnInit() {
     if (this.storeService.currentGroup) {
       this.edit = true;
-      this.submitButtonText = 'Modifier le groupe'
+      this.submitButtonText = 'Modifier le groupe';
       this.name = this.storeService.currentGroup.name;
       this.description = this.storeService.currentGroup.description;
     } else {
-        this.edit = false;
-        this.submitButtonText = 'Créer le groupe'
+      this.edit = false;
+      this.submitButtonText = 'Créer le groupe';
     }
   }
 
@@ -56,8 +56,15 @@ export class CreateGroupPage implements OnInit {
           });
           await toast.present();
           this.router.navigateByUrl('/group');
-          (err) => {
-            console.log('Could not join group', err);
+          async (err) => {
+            if (err.status == 406) {
+              const toast = await this.toastController.create({
+                message: 'Nom de groupe déjà utilisé',
+                duration: 1500,
+                position: 'top',
+              });
+              await toast.present();
+            }
           };
         });
     } else {
@@ -81,8 +88,15 @@ export class CreateGroupPage implements OnInit {
             }
           );
         },
-        (err) => {
-          console.warn('Could not create group', err);
+        async (err) => {
+          if (err.status == 406) {
+            const toast = await this.toastController.create({
+              message: 'Nom de groupe déjà utilisé',
+              duration: 1500,
+              position: 'top',
+            });
+            await toast.present();
+          }
         }
       );
     }
