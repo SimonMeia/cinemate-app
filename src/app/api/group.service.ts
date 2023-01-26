@@ -23,4 +23,8 @@ export class GroupService {
     const url = `${environment.apiUrl}/groups`;
     return this.http.post<Group>(url, groupData);
   }
+  editGroup(groupId, groupData): Observable<Group> {
+    const url = `${environment.apiUrl}/groups/${groupId}`;
+    return this.http.patch<Group>(url, groupData);
+  }
 }

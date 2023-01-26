@@ -16,14 +16,13 @@ import { StoreService } from 'src/app/store/store.service';
   styleUrls: ['./group.page.scss'],
 })
 export class GroupPage implements OnInit {
-  group: Group;
   members: User[];
   reviews: Review[];
   membre: boolean = false;
   user: User;
 
   constructor(
-    private storeService: StoreService,
+    public storeService: StoreService,
     private router: Router,
     private groupService: GroupService,
     private userService: UserService,
@@ -32,17 +31,17 @@ export class GroupPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.group = this.storeService.currentGroup;
     this.authService.getUser$().subscribe(
       (user) => {
         this.user = user;
-        if (user.groups.includes(this.group._id)) this.membre = true;
+        
+        if (user.groups.includes(this.storeService.currentGroup._id)) this.membre = true;
       },
       (err) => {
         console.warn('Could not get user', err);
       }
     );
-    this.reviewService.getGroupReviews(this.group._id).subscribe(
+    this.reviewService.getGroupReviews(this.storeService.currentGroup._id).subscribe(
       (reviews) => {
         this.reviews = this.reviewService.dateFormat(
           reviews.filter((r) => r.user._id != this.user._id)
@@ -52,7 +51,7 @@ export class GroupPage implements OnInit {
         console.warn('Could not get reviews', err);
       }
     );
-    this.groupService.getAllUsersFromGroup(this.group._id).subscribe(
+    this.groupService.getAllUsersFromGroup(this.storeService.currentGroup._id).subscribe(
       (users) => {
         this.members = users;
       },
@@ -63,13 +62,13 @@ export class GroupPage implements OnInit {
   }
 
   joinGroup() {
-    this.userService.joinGroup(this.group._id).subscribe(
+    this.userService.joinGroup(this.storeService.currentGroup._id).subscribe(
       (response) => {
         if (response.jointGroups == 1) {
-          this.authService.addUserToGroup$(this.group._id).subscribe(
+          this.authService.addUserToGroup$(this.storeService.currentGroup._id).subscribe(
             (user) => {
               this.membre = true;
-              this.storeService.myGroups.push(this.group);
+              this.storeService.myGroups.push(this.storeService.currentGroup);
             },
             (err) => {
               console.log('Could not join group', err);
@@ -83,14 +82,14 @@ export class GroupPage implements OnInit {
     );
   }
   quitGroup() {
-    this.userService.quitGroup(this.group._id).subscribe(
+    this.userService.quitGroup(this.storeService.currentGroup._id).subscribe(
       (response) => {
         if (response.leftGroups == 1) {
-          this.authService.removeGroupFromUser$(this.group._id).subscribe(
+          this.authService.removeGroupFromUser$(this.storeService.currentGroup._id).subscribe(
             (user) => {
               this.membre = false;
               this.storeService.myGroups.splice(
-                this.storeService.myGroups.indexOf(this.group),
+                this.storeService.myGroups.indexOf(this.storeService.currentGroup),
                 1
               );
             },
@@ -106,7 +105,13 @@ export class GroupPage implements OnInit {
     );
   }
 
+  editGroup() {
+    this.storeService.backPage = '/group'
+    this.router.navigateByUrl('/create-group')
+  }
+
   groups() {
+    this.storeService.currentGroup = null
     this.router.navigateByUrl('/groups');
   }
   displayReview(review) {

@@ -49,6 +49,11 @@ export class GroupsPage implements ViewWillEnter {
   displayGroup(group: Group) {
     this.storeService.currentGroup = group;
     this.router.navigateByUrl('/group');
+}
+
+createGroup(){
+    this.storeService.backPage = '/groups'
+    this.router.navigateByUrl('/create-group');
   }
 
   search(event) {

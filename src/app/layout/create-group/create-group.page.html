@@ -1,5 +1,10 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+        <ion-button (click)="back()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     <ion-title>Créer un groupe</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -27,7 +32,7 @@
       type="submit"
       [disabled]="createGroupForm.invalid"
     >
-      Créer le groupe
+      {{submitButtonText}}
     </ion-button>
   </form>
 </ion-content>
