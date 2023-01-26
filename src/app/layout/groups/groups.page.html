@@ -24,7 +24,9 @@
         <ion-label>{{ group.name }}</ion-label>
       </ion-item>
     </ion-list>
-    <ion-label *ngIf="groupsSearch.length == 0">Aucun groupe trouvé...</ion-label>
+    <ion-label *ngIf="groupsSearch.length == 0"
+      >Aucun groupe trouvé...</ion-label
+    >
   </div>
   <div *ngIf="!displaySearchResult">
     <h2>Mes groupes</h2>
@@ -50,4 +52,9 @@
       </ion-label>
     </ion-item>
   </div>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button routerLink="/create-group">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

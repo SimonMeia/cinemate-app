@@ -5,7 +5,7 @@ import { GroupService } from 'src/app/api/group.service';
 import { ReviewService } from 'src/app/api/review.service';
 import { UserService } from 'src/app/api/user.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Group } from 'src/app/models/genre copy';
+import { Group } from 'src/app/models/group';
 import { Review } from 'src/app/models/review';
 import { User } from 'src/app/models/user';
 import { StoreService } from 'src/app/store/store.service';
@@ -44,7 +44,6 @@ export class GroupPage implements OnInit {
     );
     this.reviewService.getGroupReviews(this.group._id).subscribe(
       (reviews) => {
-        console.log(reviews);
         this.reviews = this.reviewService.dateFormat(
           reviews.filter((r) => r.user._id != this.user._id)
         );
@@ -91,7 +90,7 @@ export class GroupPage implements OnInit {
             (user) => {
               this.membre = false;
               this.storeService.myGroups.splice(
-                this.storeService.allGroups.indexOf(this.group),
+                this.storeService.myGroups.indexOf(this.group),
                 1
               );
             },

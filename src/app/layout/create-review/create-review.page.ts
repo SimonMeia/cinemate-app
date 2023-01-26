@@ -116,7 +116,7 @@ export class CreateReviewPage implements OnInit {
           this.storeService.addNewReview(result);
           this.storeService.currentReview = result;
           const toast = await this.toastController.create({
-            message: 'Review Added',
+            message: 'Review publiée',
             duration: 1500,
             position: 'top',
           });

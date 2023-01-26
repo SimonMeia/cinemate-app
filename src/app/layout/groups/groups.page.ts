@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ViewWillEnter } from '@ionic/angular';
 import { GroupService } from 'src/app/api/group.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Group } from 'src/app/models/genre copy';
+import { Group } from 'src/app/models/group';
 import { StoreService } from 'src/app/store/store.service';
 
 @Component({
@@ -29,12 +29,9 @@ export class GroupsPage implements ViewWillEnter {
   ionViewWillEnter(): void {
     this.authService.getUser$().subscribe(
       (user) => {
-        console.log(user);
-
         this.groupService.getAllGroups().subscribe(
           (groups) => {
             this.storeService.allGroups = groups;
-            // this.userGroups = [...this.allGroups].filter(g => user.groups.includes(g._id))
             this.storeService.myGroups = [...this.storeService.allGroups].filter((g) =>
               user.groups.includes(g._id)
             );

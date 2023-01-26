@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Group } from '../models/genre copy';
+import { Group } from '../models/group';
 import { Movie } from '../models/movie';
 import { Review } from '../models/review';
 

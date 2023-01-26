@@ -96,7 +96,7 @@ export class ReviewPage implements OnInit {
         if (response.deleteCount == 1) {
           this.storeService.deleteReview(this.review._id);
           const toast = await this.toastController.create({
-            message: 'Review deleted',
+            message: 'Review supprimée',
             duration: 1500,
             position: 'top',
           });

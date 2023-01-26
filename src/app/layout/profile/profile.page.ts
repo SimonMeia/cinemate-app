@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GroupService } from 'src/app/api/group.service';
 import { ReviewService } from 'src/app/api/review.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Group } from 'src/app/models/genre copy';
+import { Group } from 'src/app/models/group';
 import { Review } from 'src/app/models/review';
 import { User } from 'src/app/models/user';
 import { defaultIcon } from 'src/app/default-marker';

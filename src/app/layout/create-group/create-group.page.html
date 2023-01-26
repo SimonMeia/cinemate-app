@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Créer un groupe</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form #createGroupForm="ngForm" (submit)="createGroup(createGroupForm)">
+    <h1>Groupe</h1>
+    <ion-input
+      type="text"
+      placeholder="Nom du groupe"
+      [(ngModel)]="name"
+      name="name"
+      required
+    ></ion-input>
+    <h1>Description</h1>
+    <ion-input
+      type="text"
+      placeholder="Description"
+      [(ngModel)]="description"
+      name="description"
+      required
+    ></ion-input>
+    <ion-button
+      expand="block"
+      type="submit"
+      [disabled]="createGroupForm.invalid"
+    >
+      Créer le groupe
+    </ion-button>
+  </form>
+</ion-content>

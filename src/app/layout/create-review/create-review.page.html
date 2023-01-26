@@ -80,7 +80,7 @@
     />
     <h1>Commentaire</h1>
     <ion-input
-      type="textebox"
+      type="text"
       placeholder="Commentaire"
       [(ngModel)]="comment"
       name="comment"
@@ -104,13 +104,12 @@
       (leafletMapReady)="onMapReady($event)"
     ></div>
 
-    <!-- <ion-button type="submit">Submit</ion-button> -->
     <ion-button
       expand="block"
       type="submit"
       [disabled]="disablePublishButton && createReviewForm.invalid"
     >
-      Submit
+      Publier la review
     </ion-button>
   </form>
 </ion-content>
