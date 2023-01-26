@@ -10,6 +10,9 @@
 <ion-content class="ion-padding">
   <form #createReviewForm="ngForm" (submit)="createReview(createReviewForm)">
     <h1>Film</h1>
+    <span class="error" *ngIf="!tmdbID && movieInput.touched">
+      Veuillez selectionner un film.
+    </span>
     <ion-input
       type="text"
       placeholder="Nom du film"
@@ -17,6 +20,7 @@
       name="movie"
       (input)="lookForMovie()"
       required
+      #movieInput="ngModel"
     ></ion-input>
 
     <div *ngFor="let proposition of movieProposition">
@@ -30,60 +34,83 @@
       <label for="{{proposition.id}}"> {{proposition.original_title}} </label>
     </div>
     <h1>Date</h1>
+    <span class="error" *ngIf="dateInput.invalid && dateInput.touched">
+      Veuillez selectionner une date.
+    </span>
     <ion-input
       type="date"
       placeholder="Date"
       [(ngModel)]="date"
       name="date"
+      #dateInput="ngModel"
       required
     ></ion-input>
     <h1>Note</h1>
-    <label for="rating-1">1</label>
-    <input
-      type="radio"
-      id="rating-1"
-      name="rating"
-      value="1"
-      [(ngModel)]="rating"
-    />
-    <label for="rating-2">2</label>
-    <input
-      type="radio"
-      id="rating-2"
-      name="rating"
-      value="2"
-      [(ngModel)]="rating"
-    />
-    <label for="rating-3">3</label>
-    <input
-      type="radio"
-      id="rating-3"
-      name="rating"
-      value="3"
-      [(ngModel)]="rating"
-    />
-    <label for="rating-4">4</label>
-    <input
-      type="radio"
-      id="rating-4"
-      name="rating"
-      value="4"
-      [(ngModel)]="rating"
-    />
-    <label for="rating-5">5</label>
-    <input
-      type="radio"
-      id="rating-5"
-      name="rating"
-      value="5"
-      [(ngModel)]="rating"
-    />
+    <div id="rating-seletors">
+      <div class="rating">
+        <label for="rating-1">1 </label>
+        <input
+          type="radio"
+          id="rating-1"
+          name="rating"
+          value="1"
+          [(ngModel)]="rating"
+        />
+      </div>
+
+      <div class="rating">
+        <label for="rating-2">2 </label>
+        <input
+          type="radio"
+          id="rating-2"
+          name="rating"
+          value="2"
+          [(ngModel)]="rating"
+        />
+      </div>
+
+      <div class="rating">
+        <label for="rating-3">3 </label>
+        <input
+          type="radio"
+          id="rating-3"
+          name="rating"
+          value="3"
+          [(ngModel)]="rating"
+        />
+      </div>
+
+      <div class="rating">
+        <label for="rating-4">4 </label>
+        <input
+          type="radio"
+          id="rating-4"
+          name="rating"
+          value="4"
+          [(ngModel)]="rating"
+        />
+      </div>
+      <div class="rating">
+        <label for="rating-5">5 </label>
+        <input
+          type="radio"
+          id="rating-5"
+          name="rating"
+          value="5"
+          [(ngModel)]="rating"
+        />
+      </div>
+    </div>
     <h1>Commentaire</h1>
+    <span class="error" *ngIf="commentInput.invalid && commentInput.touched">
+      Veuillez écrire un commentaire.
+    </span>
     <ion-input
       type="text"
       placeholder="Commentaire"
       [(ngModel)]="comment"
       name="comment"
+      #commentInput="ngModel"
       required
     >
     </ion-input>

@@ -61,6 +61,7 @@ export class CreateReviewPage implements OnInit {
 
   lookForMovie() {
     this.movieProposition = [];
+    this.tmdbID = null
     this.tmdbService.getMovie(this.movie).subscribe(
       (result) => {
         let proposition: number;

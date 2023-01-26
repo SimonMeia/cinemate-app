@@ -1,3 +1,12 @@
 .leaflet-map {
   height: 150px;
 }
+.error {
+  color: crimson;
+}
+
+#rating-seletors {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

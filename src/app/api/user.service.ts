@@ -20,5 +20,9 @@ export class UserService {
   quitGroup(groupId: string): Observable<any> {
     const url = `${environment.apiUrl}/users/groups/${groupId}`;
     return this.http.delete<any>(url, {});
+}
+addUser(userData: any){
+      const url = `${environment.apiUrl}/users`;
+      return this.http.post<any>(url, userData);
   }
 }

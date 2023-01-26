@@ -29,18 +29,20 @@ export class GroupsPage implements ViewWillEnter {
   ionViewWillEnter(): void {
     this.authService.getUser$().subscribe(
       (user) => {
-        this.groupService.getAllGroups().subscribe(
-          (groups) => {
-            this.storeService.allGroups = groups;
-            this.storeService.myGroups = [...this.storeService.allGroups].filter((g) =>
-              user.groups.includes(g._id)
-            );
-            this.storeService.currentGroup = null
-          },
-          (err) => {
-            console.warn('Could not get groups', err);
-          }
-        );
+        if (user) {
+          this.groupService.getAllGroups().subscribe(
+            (groups) => {
+              this.storeService.allGroups = groups;
+              this.storeService.myGroups = [
+                ...this.storeService.allGroups,
+              ].filter((g) => user.groups.includes(g._id));
+              this.storeService.currentGroup = null;
+            },
+            (err) => {
+              console.warn('Could not get groups', err);
+            }
+          );
+        }
       },
       (err) => {
         console.warn('Could not get user', err);
@@ -50,10 +52,10 @@ export class GroupsPage implements ViewWillEnter {
   displayGroup(group: Group) {
     this.storeService.currentGroup = group;
     this.router.navigateByUrl('/group');
-}
+  }
 
-createGroup(){
-    this.storeService.backPage = '/groups'
+  createGroup() {
+    this.storeService.backPage = '/groups';
     this.router.navigateByUrl('/create-group');
   }
 

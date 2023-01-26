@@ -33,47 +33,55 @@ export class GroupPage implements OnInit {
   ngOnInit() {
     this.authService.getUser$().subscribe(
       (user) => {
-        this.user = user;
-        
-        if (user.groups.includes(this.storeService.currentGroup._id)) this.membre = true;
+        if (user && this.storeService.currentGroup) {
+          this.user = user;
+          if (user.groups.includes(this.storeService.currentGroup._id))
+            this.membre = true;
+        }
       },
       (err) => {
         console.warn('Could not get user', err);
       }
     );
-    this.reviewService.getGroupReviews(this.storeService.currentGroup._id).subscribe(
-      (reviews) => {
-        this.reviews = this.reviewService.dateFormat(
-          reviews.filter((r) => r.user._id != this.user._id)
-        );
-      },
-      (err) => {
-        console.warn('Could not get reviews', err);
-      }
-    );
-    this.groupService.getAllUsersFromGroup(this.storeService.currentGroup._id).subscribe(
-      (users) => {
-        this.members = users;
-      },
-      (err) => {
-        console.warn('Could not get user', err);
-      }
-    );
+    this.reviewService
+      .getGroupReviews(this.storeService.currentGroup._id)
+      .subscribe(
+        (reviews) => {
+          this.reviews = this.reviewService.dateFormat(
+            reviews.filter((r) => r.user._id != this.user._id)
+          );
+        },
+        (err) => {
+          console.warn('Could not get reviews', err);
+        }
+      );
+    this.groupService
+      .getAllUsersFromGroup(this.storeService.currentGroup._id)
+      .subscribe(
+        (users) => {
+          this.members = users;
+        },
+        (err) => {
+          console.warn('Could not get user', err);
+        }
+      );
   }
 
   joinGroup() {
     this.userService.joinGroup(this.storeService.currentGroup._id).subscribe(
       (response) => {
         if (response.jointGroups == 1) {
-          this.authService.addUserToGroup$(this.storeService.currentGroup._id).subscribe(
-            (user) => {
-              this.membre = true;
-              this.storeService.myGroups.push(this.storeService.currentGroup);
-            },
-            (err) => {
-              console.log('Could not join group', err);
-            }
-          );
+          this.authService
+            .addUserToGroup$(this.storeService.currentGroup._id)
+            .subscribe(
+              (user) => {
+                this.membre = true;
+                this.storeService.myGroups.push(this.storeService.currentGroup);
+              },
+              (err) => {
+                console.log('Could not join group', err);
+              }
+            );
         }
       },
       (err) => {
@@ -85,18 +93,22 @@ export class GroupPage implements OnInit {
     this.userService.quitGroup(this.storeService.currentGroup._id).subscribe(
       (response) => {
         if (response.leftGroups == 1) {
-          this.authService.removeGroupFromUser$(this.storeService.currentGroup._id).subscribe(
-            (user) => {
-              this.membre = false;
-              this.storeService.myGroups.splice(
-                this.storeService.myGroups.indexOf(this.storeService.currentGroup),
-                1
-              );
-            },
-            (err) => {
-              console.log('Could not quit group', err);
-            }
-          );
+          this.authService
+            .removeGroupFromUser$(this.storeService.currentGroup._id)
+            .subscribe(
+              (user) => {
+                this.membre = false;
+                this.storeService.myGroups.splice(
+                  this.storeService.myGroups.indexOf(
+                    this.storeService.currentGroup
+                  ),
+                  1
+                );
+              },
+              (err) => {
+                console.log('Could not quit group', err);
+              }
+            );
         }
       },
       (err) => {
@@ -106,12 +118,12 @@ export class GroupPage implements OnInit {
   }
 
   editGroup() {
-    this.storeService.backPage = '/group'
-    this.router.navigateByUrl('/create-group')
+    this.storeService.backPage = '/group';
+    this.router.navigateByUrl('/create-group');
   }
 
   groups() {
-    this.storeService.currentGroup = null
+    this.storeService.currentGroup = null;
     this.router.navigateByUrl('/groups');
   }
   displayReview(review) {
