@@ -8,8 +8,18 @@ import { Review } from 'src/app/models/review';
 })
 export class ReviewComponent implements OnInit {
   @Input() review?: Review;
-
+rating: string[]
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // Met en forme les étoiles
+    this.rating = [];
+    for (let index = 1; index <= 5; index++) {
+      if (index <= this.review.rating) {
+        this.rating.push('star');
+      } else {
+        this.rating.push('star-outline');
+      }
+    }
+  }
 }

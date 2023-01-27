@@ -51,15 +51,10 @@ export class HomePage implements ViewWillEnter {
 
   onIonInfinite(event) {
     if (this.currentPage == this.lastPage) {
-      console.log('tru');
-
       this.disableInfiniteScroll = true;
       return;
     }
-    console.log('current ' + this.currentPage, 'last' + this.lastPage);
     this.currentPage++;
-    console.log('next ', this.currentPage);
-
     this.reviewService
       .getReviewsFromMyGroups({ page: this.currentPage })
       .subscribe(

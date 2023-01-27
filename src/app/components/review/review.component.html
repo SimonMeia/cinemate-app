@@ -1,7 +1,7 @@
 <ion-card>
   <img
     alt="Silhouette of mountains"
-    src="https://image.tmdb.org/t/p/original/{{review.movie.backdropURL}}"
+    src="https://image.tmdb.org/t/p/original/{{ review.movie.backdropURL }}"
   />
   <ion-card-header>
     <ion-card-title>
@@ -11,6 +11,8 @@
   </ion-card-header>
 
   <ion-card-content>
-    {{ review.comment }}
+    <span *ngFor="let star of rating">
+      <ion-icon slot="icon-only" name="{{ star }}"></ion-icon>
+    </span>
   </ion-card-content>
 </ion-card>

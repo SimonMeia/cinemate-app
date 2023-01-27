@@ -61,23 +61,25 @@ export class CreateReviewPage implements OnInit {
 
   lookForMovie() {
     this.movieProposition = [];
-    this.tmdbID = null
-    this.tmdbService.getMovie(this.movie).subscribe(
-      (result) => {
-        let proposition: number;
-        if (result.results.length > 5) {
-          proposition = 5;
-        } else {
-          proposition = result.results.length;
+    this.tmdbID = null;
+    if (this.movie.length > 0) {
+      this.tmdbService.getMovie(this.movie).subscribe(
+        (result) => {
+          let proposition: number;
+          if (result.results.length > 5) {
+            proposition = 5;
+          } else {
+            proposition = result.results.length;
+          }
+          for (let index = 0; index < proposition; index++) {
+            this.movieProposition[index] = result.results[index];
+          }
+        },
+        (err) => {
+          console.warn('Could not get movies', err);
         }
-        for (let index = 0; index < proposition; index++) {
-          this.movieProposition[index] = result.results[index];
-        }
-      },
-      (err) => {
-        console.warn('Could not get movies', err);
-      }
-    );
+      );
+    }
   }
 
   addPictureToReview() {
@@ -134,16 +136,18 @@ export class CreateReviewPage implements OnInit {
   }
 
   async printCurrentPosition() {
-    Geolocation.getCurrentPosition().then(loc => {
+    Geolocation.getCurrentPosition()
+      .then((loc) => {
         this.setPinPoint(loc.coords.latitude, loc.coords.longitude);
-    }).catch(async error => {
+      })
+      .catch(async (error) => {
         const toast = await this.toastController.create({
-            message: 'Impossible de trouver la position',
-            duration: 1500,
-            position: 'top',
-          });
-          await toast.present();
-    })
+          message: 'Impossible de trouver la position',
+          duration: 1500,
+          position: 'top',
+        });
+        await toast.present();
+      });
   }
 
   setPinPoint(lat, long) {
