@@ -13,6 +13,9 @@
   <div *ngFor="let review of storeService.reviews">
     <app-review [review]="review" (click)="displayReview(review)"></app-review>
   </div>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)"  [disabled]="disableInfiniteScroll">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button routerLink="/create-review">

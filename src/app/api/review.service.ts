@@ -20,8 +20,11 @@ export class ReviewService {
     const url = `${environment.apiUrl}/reviews/groups/${groupId}`;
     return this.http.get<Review[]>(url);
   }
-  getReviewsFromMyGroups(): Observable<ReviewsFromMyGroups> {
-    const url = `${environment.apiUrl}/reviews/mygroups`;
+  getReviewsFromMyGroups({
+    pageSize = 10,
+    page = 1,
+  } = {}): Observable<ReviewsFromMyGroups> {
+    const url = `${environment.apiUrl}/reviews/mygroups?pageSize=${pageSize}&page=${page}`;
     return this.http.get<ReviewsFromMyGroups>(url);
   }
 
@@ -41,21 +44,21 @@ export class ReviewService {
 
   dateFormat(review: Review[]): Review[] {
     review.sort((a, b) => {
-        let date1 = new Date(a.date);
-        let date2 = new Date(b.date);
-        if (date1.getTime() < date2.getTime()) {
-          return 1;
-        } else if (date1.getTime() > date2.getTime()) {
-          return -1;
-        }
-        return 0;
-      });
-      review.forEach(
-        (review) =>
-          (review.date = new Date(review.date)
-            .toLocaleDateString('fr')
-            .toString())
-      );
-      return review
+      let date1 = new Date(a.date);
+      let date2 = new Date(b.date);
+      if (date1.getTime() < date2.getTime()) {
+        return 1;
+      } else if (date1.getTime() > date2.getTime()) {
+        return -1;
+      }
+      return 0;
+    });
+    review.forEach(
+      (review) =>
+        (review.date = new Date(review.date)
+          .toLocaleDateString('fr')
+          .toString())
+    );
+    return review;
   }
 }
