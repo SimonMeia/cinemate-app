@@ -94,7 +94,7 @@ export class CreateReviewPage implements OnInit {
   }
 
   createReview(form: NgForm) {
-    if (form.valid) {
+    if (form.valid && this.tmdbID) {
       let mediaURL = '';
       if (this.picture) {
         mediaURL = this.picture.url;
@@ -111,11 +111,14 @@ export class CreateReviewPage implements OnInit {
         tmdbID: this.tmdbID,
       };
 
+      console.log(this.tmdbID)
+      
       this.reviewService.addReviewToDatabase(reviewData).subscribe(
         async (result) => {
           result.date = new Date(result.date)
             .toLocaleDateString('fr')
             .toString();
+
           this.storeService.addNewReview(result);
           this.storeService.currentReview = result;
           const toast = await this.toastController.create({
@@ -129,7 +132,7 @@ export class CreateReviewPage implements OnInit {
           this.router.navigateByUrl('/review');
         },
         (err) => {
-          console.warn('Could not get reviews', err);
+          console.warn('Could not add reviews', err);
         }
       );
     }

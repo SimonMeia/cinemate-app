@@ -21,7 +21,7 @@ export class ReviewService {
     return this.http.get<Review[]>(url);
   }
   getReviewsFromMyGroups({
-    pageSize = 10,
+    pageSize = 2,
     page = 1,
   } = {}): Observable<ReviewsFromMyGroups> {
     const url = `${environment.apiUrl}/reviews/mygroups?pageSize=${pageSize}&page=${page}`;

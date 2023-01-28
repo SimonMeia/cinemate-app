@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { GroupService } from 'src/app/api/group.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Group } from 'src/app/models/group';
@@ -12,7 +12,7 @@ import { StoreService } from 'src/app/store/store.service';
   templateUrl: './create-group.page.html',
   styleUrls: ['./create-group.page.scss'],
 })
-export class CreateGroupPage implements OnInit {
+export class CreateGroupPage implements ViewWillEnter {
   name: string;
   description: string;
   edit: boolean;
@@ -26,7 +26,7 @@ export class CreateGroupPage implements OnInit {
     private toastController: ToastController
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     if (this.storeService.currentGroup) {
       this.edit = true;
       this.submitButtonText = 'Modifier le groupe';

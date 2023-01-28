@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ViewWillEnter } from '@ionic/angular';
 import { GroupService } from 'src/app/api/group.service';
 import { ReviewService } from 'src/app/api/review.service';
 import { UserService } from 'src/app/api/user.service';
@@ -15,7 +16,7 @@ import { StoreService } from 'src/app/store/store.service';
   templateUrl: './group.page.html',
   styleUrls: ['./group.page.scss'],
 })
-export class GroupPage implements OnInit {
+export class GroupPage implements ViewWillEnter {
   members: User[];
   reviews: Review[];
   membre: boolean = false;
@@ -30,7 +31,7 @@ export class GroupPage implements OnInit {
     private authService: AuthService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.authService.getUser$().subscribe(
       (user) => {
         if (user && this.storeService.currentGroup) {
@@ -77,6 +78,7 @@ export class GroupPage implements OnInit {
               (user) => {
                 this.membre = true;
                 this.storeService.myGroups.push(this.storeService.currentGroup);
+                this.members.push(user)
               },
               (err) => {
                 console.log('Could not join group', err);

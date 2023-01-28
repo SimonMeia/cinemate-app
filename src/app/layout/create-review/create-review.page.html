@@ -10,7 +10,7 @@
 <ion-content class="ion-padding">
   <form #createReviewForm="ngForm" (submit)="createReview(createReviewForm)">
     <h1>Film</h1>
-    <span class="error" *ngIf="!tmdbID && movieInput.touched">
+    <span class="error" *ngIf="tmdbID == null">
       Veuillez selectionner un film.
     </span>
     <ion-input
@@ -21,15 +21,15 @@
       (input)="lookForMovie()"
       required
       #movieInput="ngModel"
-    ></ion-input>
-
-    <div *ngFor="let proposition of movieProposition">
-      <input
-        type="radio"
-        id="{{proposition.id}}"
-        name="tmdbID"
-        value="{{proposition.id}}"
-        [(ngModel)]="tmdbID"
+      ></ion-input>
+      
+      <div *ngFor="let proposition of movieProposition">
+          <input
+          type="radio"
+          id="{{proposition.id}}"
+          name="tmdbID"
+          value="{{proposition.id}}"
+          [(ngModel)]="tmdbID"
       />
       <label for="{{proposition.id}}"> {{proposition.original_title}} </label>
     </div>

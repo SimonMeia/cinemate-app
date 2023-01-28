@@ -59,9 +59,8 @@ export class HomePage implements ViewWillEnter {
       .getReviewsFromMyGroups({ page: this.currentPage })
       .subscribe(
         (result) => {
-          this.reviewService
-            .dateFormat(result.data)
-            .forEach((r) => this.storeService.reviews.push(r));
+            result.data = this.reviewService.dateFormat(result.data)
+            result.data.forEach((r) => this.storeService.reviews.push(r));
             (event as InfiniteScrollCustomEvent).target.complete();
         },
         (err) => {
