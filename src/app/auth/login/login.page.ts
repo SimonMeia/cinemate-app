@@ -26,8 +26,7 @@ export class LoginPage {
 
   constructor(private auth: AuthService, private router: Router) {
     this.authRequest = {
-      email: 'simon.meia@bluewin.ch',
-      // email: undefined,
+      email: undefined,
       password: undefined,
     };
   }

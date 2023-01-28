@@ -55,12 +55,10 @@ export class ProfilePage implements ViewWillEnter {
   }
 
   ionViewWillEnter(): void {
-    
     this.authService.getUser$().subscribe(
       (user) => {
-        this.user = user;
-        
-        if (this.user) {
+        if (user) {
+          this.user = user;
           this.userService.getAllUserGroups(this.user._id).subscribe(
             (groups) => {
               this.groups = groups;
@@ -107,7 +105,6 @@ export class ProfilePage implements ViewWillEnter {
   }
 
   logOut() {
-    console.log('logging out...');
     this.router.navigateByUrl('/login');
     this.authService.logOut();
   }
