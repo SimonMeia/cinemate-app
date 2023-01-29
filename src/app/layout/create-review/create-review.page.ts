@@ -110,7 +110,7 @@ export class CreateReviewPage implements OnInit {
         medias: mediaURL,
         tmdbID: this.tmdbID,
       };
-      
+
       this.reviewService.addReviewToDatabase(reviewData).subscribe(
         async (result) => {
           result.date = new Date(result.date)
@@ -129,7 +129,13 @@ export class CreateReviewPage implements OnInit {
           this.storeService.backPage = '/home';
           this.router.navigateByUrl('/review');
         },
-        (err) => {
+        async (err) => {
+          const toast = await this.toastController.create({
+            message: 'Impossible d\'ajouter la review',
+            duration: 1500,
+            position: 'top',
+          });
+          await toast.present();
           console.warn('Could not add reviews', err);
         }
       );
