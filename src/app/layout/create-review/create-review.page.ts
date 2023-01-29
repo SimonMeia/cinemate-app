@@ -110,8 +110,6 @@ export class CreateReviewPage implements OnInit {
         medias: mediaURL,
         tmdbID: this.tmdbID,
       };
-
-      console.log(this.tmdbID)
       
       this.reviewService.addReviewToDatabase(reviewData).subscribe(
         async (result) => {
